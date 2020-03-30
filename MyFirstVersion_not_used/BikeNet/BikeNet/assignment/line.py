@@ -6,6 +6,7 @@ from copy import deepcopy
 
 # Derivation
 def div(net_a, net_b, prior_a,prior_b, posterior_a, posterior_b,origins,destinations,od_flow,od_flow_b,v_b,step,timecost_b,_ulabel_lane,per_b):
+
     third =deepcopy(od_flow)
     idiv = 0
     cost_a={}
@@ -27,15 +28,11 @@ def div(net_a, net_b, prior_a,prior_b, posterior_a, posterior_b,origins,destinat
     for lid in prior_b.keys():    
         dist_b[lid] = posterior_b[lid] - prior_b[lid]
     for lid in prior_a.keys():
-        for j in range(1,7):
-            if lid in ["E{:0>3}".format(j)]:
-                cost_a[lid] = dist_a[lid]*net_a.edgeset[lid].cal_weight1(prior_a[lid] + step * dist_a[lid],prior_b[lid] + step * dist_b[lid],_ulabel_lane[j-1])
-                idiv += cost_a[lid]
+        cost_a[lid] = dist_a[lid]*net_a.edgeset[lid].cal_weight1(prior_a[lid] + step * dist_a[lid],prior_b[lid] + step * dist_b[lid],_ulabel_lane)
+        idiv += cost_a[lid]
     for lid in prior_b.keys():
-        for j in range(1,7):
-            if lid in ["E{:0>3}".format(j)]:
-                cost_b[lid] = dist_b[lid]*net_b.edgeset[lid].cal_weight2(prior_a[lid] + step * dist_a[lid],prior_b[lid] + step * dist_b[lid],_ulabel_lane[j-1])
-                idiv += cost_b[lid]
+        cost_b[lid] = dist_b[lid]*net_b.edgeset[lid].cal_weight2(prior_a[lid] + step * dist_a[lid],prior_b[lid] + step * dist_b[lid],_ulabel_lane)
+        idiv += cost_b[lid]
     return idiv
 
 def cal_step(net_a, net_b, prior_a,prior_b, posterior_a, posterior_b,origins,destinations,od_flow,od_flow_b,v_b,timecost_b,_ulabel_lane,per_b):
@@ -74,3 +71,4 @@ def cal_limit(prior_a, posterior_a,prior_b, posterior_b):
     else:
         b=math.sqrt(limiter)/a
     return b
+

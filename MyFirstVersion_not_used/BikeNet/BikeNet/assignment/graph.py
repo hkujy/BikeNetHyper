@@ -25,7 +25,6 @@ class edge_a:
         # _label_lane==1 means this lane is selected and will be devided into exclusive bike lane and motor lane
         if _label_lane==1:
             self.cost = self.fft*(1+self.alpha*np.power(volume1/self.capacity1, self.beta))
-           # print("@@@@@@@@@@@@@@11111111111111",self.cost)
         else:
             self.cost = self.fft*(1+self.alpha*np.power((volume1+volume2)/(self.capacity1+self.capacity2),self.beta))
         return self.cost
@@ -101,9 +100,9 @@ class network_a:
     
     def update_cost1(self,volume1,volume2,_label_lane):
         for l in self.edgeset.keys():
-            for j in range(1,7):
+            for j in range(0,6):
                 if l in ["E{:0>3}".format(j)]:
-                    self.edgeset[l].cal_weight1(volume1[l],volume2[l],_label_lane[j-1])
+                    self.edgeset[l].cal_weight1(volume1[l],volume2[l],_label_lane[j])
                     continue
 class edge_b:
     def __init__(self, edge_info):
@@ -126,7 +125,6 @@ class edge_b:
         """
         if _label_lane==1:
             self.cost = self.fft*(1+self.alpha*np.power(volume2/self.capacity2, self.beta))
-           # print("@@@@@@@@@@@@@@22222222222222",self.cost)
         else:
             self.cost = self.fft*(1+self.alpha*np.power((volume1+volume2)/(self.capacity1+self.capacity2),self.beta))
         return self.cost
@@ -202,9 +200,7 @@ class network_b:
 
     def update_cost2(self,volume1,volume2,_label_lane):
         for l in self.edgeset.keys():
-            for j in range(1,7):
+            for j in range(0,6):
                 if l in ["E{:0>3}".format(j)]:
-                    self.edgeset[l].cal_weight2(volume1[l],volume2[l],_label_lane[j-1])
+                    self.edgeset[l].cal_weight2(volume1[l],volume2[l],_label_lane[j])
                     continue
-
-

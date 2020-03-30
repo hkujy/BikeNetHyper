@@ -1,7 +1,11 @@
-from assignment.assign import *
+from assignment.assign import frank_wolfe
 from assignment.line import *
 from assignment.graph import *
 
+
+"""
+
+"""
 
 def read_network_auto(_label_lane):
     
@@ -42,7 +46,7 @@ def od_demand():
 # read from json
     # read od flow
     od_flow = {
-        'N001': {'N002':500,'N003':500}}
+        'N001': {'N002':1000,'N003':1000}}
     origins = ['N001']
     destinations = ['N002','N003']
     return od_flow, origins, destinations

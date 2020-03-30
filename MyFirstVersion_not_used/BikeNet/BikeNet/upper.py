@@ -1,6 +1,6 @@
 import random
 import copy
-from assignment.assign import * 
+from assignment.assign import frank_wolfe,FW_main
 from assignment.graph import * 
 from assignment.line import *
 import set_input
@@ -53,7 +53,7 @@ label_lane=[]
 for i in lane:
     label_lane.append(1)
 cost_station=[3000,4000,4000,3000,3000,4000]
-cost_lane=[50000,55000,40000,35000,40000,40000]
+cost_lane=[3000,2500,3000,3500,3000,2000]
 best_cost=1037387
 best_lane=copy.deepcopy(label_lane)
 best_station=[1,0,0,2,0,3]
@@ -342,7 +342,11 @@ def cal_new_cost(_station,_label_station,_label_lane,_cost_station,_cost_lane,_l
     od_flow, origins, destinations = set_input.od_demand()
     nt_a = set_input.read_network_auto(_label_lane)
     nt_b = set_input.read_network_bike(_label_lane)
-    vol_a,vol_b,time_cost = FW_main(nt_a,nt_b,od_flow,origins,destinations,_label_lane,_label_station)
+#############
+    FW_main(nt_a,nt_b,od_flow,origins,destinations,_label_lane,_label_station)
+#############
+    vol_a,vol_b,time_cost = frank_wolfe(nt_a, nt_b, od_flow, origins, destinations,_label_lane,_label_station)
+    
     if gl.isOutPutDetail:
         print("*****motor vehicles*****")
         for link in vol_a.keys():
@@ -356,7 +360,7 @@ def cal_new_cost(_station,_label_station,_label_lane,_cost_station,_cost_lane,_l
 #Step 5: test upper
 n=0
 start_time = time.perf_counter()
-while n<100:
+while n<5:
     print(n)
     n+=1
     SEQ=[]
@@ -386,11 +390,9 @@ while n<100:
         label_station=copy.deepcopy(cur_station)
 
 print(best_cost,best_lane,best_station)
-'''test UE:
-best_lane=[1,1,1,1,1,1]
-best_station=[1,0,0,2,0,3]
-'''
+
+
 cal_new_cost(_station=station,_label_station=best_station,_label_lane=best_lane,_cost_station=cost_station,_cost_lane=cost_lane,_lane=lane)
-print(best_cost,best_lane,best_station)
+
 elapsed_time = time.perf_counter() - start_time  
 print('time of f-w: ', elapsed_time)
